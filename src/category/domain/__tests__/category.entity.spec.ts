@@ -2,6 +2,12 @@ import { Uuid } from '../../../shared/domain/value-objects/uuid.vo';
 import { Category } from '../category.entity';
 
 describe('Category Unit Tests', () => {
+  let validateSpy: any;
+
+  beforeEach(() => {
+    validateSpy = jest.spyOn(Category, 'validate');
+  });
+
   describe('constructor', () => {
     test('should create a category with default values', () => {
       const category = new Category({
@@ -57,6 +63,7 @@ describe('Category Unit Tests', () => {
       expect(category.description).toBeNull();
       expect(category.is_active).toBeTruthy();
       expect(category.created_at).toBeInstanceOf(Date);
+      expect(validateSpy).toHaveBeenCalledTimes(1);
     });
 
     test('should create a category with name and description', () => {
@@ -70,6 +77,7 @@ describe('Category Unit Tests', () => {
       expect(category.description).toBe('Movie description');
       expect(category.is_active).toBeTruthy();
       expect(category.created_at).toBeInstanceOf(Date);
+      expect(validateSpy).toHaveBeenCalledTimes(1);
     });
 
     test('should create a category with name, description and is_active', () => {
@@ -84,6 +92,7 @@ describe('Category Unit Tests', () => {
       expect(category.description).toBe('Movie description');
       expect(category.is_active).toBeFalsy();
       expect(category.created_at).toBeInstanceOf(Date);
+      expect(validateSpy).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -110,6 +119,7 @@ describe('Category Unit Tests', () => {
     category.changeName('Series');
 
     expect(category.name).toBe('Series');
+    expect(validateSpy).toHaveBeenCalledTimes(2);
   });
 
   test('should change description', () => {
@@ -120,6 +130,7 @@ describe('Category Unit Tests', () => {
     category.changeDescription('Movie description');
 
     expect(category.description).toBe('Movie description');
+    expect(validateSpy).toHaveBeenCalledTimes(2);
   });
 
   test('should activate', () => {
@@ -131,6 +142,7 @@ describe('Category Unit Tests', () => {
     category.activate();
 
     expect(category.is_active).toBeTruthy();
+    expect(validateSpy).toHaveBeenCalledTimes(1);
   });
 
   test('should deactivate', () => {
@@ -141,5 +153,6 @@ describe('Category Unit Tests', () => {
     category.deactivate();
 
     expect(category.is_active).toBeFalsy();
+    expect(validateSpy).toHaveBeenCalledTimes(1);
   });
 });
