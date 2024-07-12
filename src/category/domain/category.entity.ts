@@ -1,3 +1,4 @@
+import { EntityValidationError } from '../../shared/domain/validators/validation.error';
 import { Uuid } from '../../shared/domain/value-objects/uuid.vo';
 import { CategoryValidatorFactory } from './category.validator';
 
@@ -47,18 +48,21 @@ export class Category {
     Category.validate(this);
   }
 
-  activate(): void {
+  activate() {
     this.is_active = true;
   }
 
-  deactivate(): void {
+  deactivate() {
     this.is_active = false;
   }
 
   static validate(entity: Category) {
     const validator = CategoryValidatorFactory.create();
+    const isValid = validator.validate(entity);
 
-    return validator.validate(entity);
+    if (!isValid) {
+      throw new EntityValidationError(validator.errors);
+    }
   }
 
   toJSON() {

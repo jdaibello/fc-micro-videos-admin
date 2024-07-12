@@ -1,3 +1,4 @@
+import { EntityValidationError } from '../../../shared/domain/validators/validation.error';
 import { Uuid } from '../../../shared/domain/value-objects/uuid.vo';
 import { Category } from '../category.entity';
 
@@ -154,5 +155,17 @@ describe('Category Unit Tests', () => {
 
     expect(category.is_active).toBeFalsy();
     expect(validateSpy).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('Category Validator', () => {
+  describe('create command', () => {
+    test('xpto', () => {
+      expect(() => {
+        Category.create({
+          name: '',
+        });
+      }).toThrow(new EntityValidationError({ name: ['name is required'] }));
+    });
   });
 });
