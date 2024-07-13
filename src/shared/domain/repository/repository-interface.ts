@@ -7,7 +7,7 @@ export interface IRepository<E extends Entity, EntityID extends ValueObject> {
   update(entity: E): Promise<void>;
   delete(entity_id: EntityID): Promise<void>;
 
-  findById(entity_id: EntityID): Promise<E>;
+  findById(entity_id: EntityID): Promise<E | null>;
   findAll(): Promise<E[]>;
 
   getEntity(): new (...args: any[]) => E;
