@@ -11,7 +11,7 @@ export type CreateCategoryInput = {
 export type CreateCategoryOutput = {
   id: string;
   name: string;
-  description: string | null;
+  description: string;
   is_active: boolean;
   created_at: Date;
 };
