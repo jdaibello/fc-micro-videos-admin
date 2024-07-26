@@ -216,14 +216,14 @@ const config: Config = {
     '.input.ts',
     '.d.ts',
   ], */
-  /* coverageThreshold: {
+  coverageThreshold: {
     global: {
       statements: 80,
       branches: 80,
       functions: 80,
       lines: 80,
     },
-  }, */
+  },
   testEnvironment: 'node',
   // setupFilesAfterEnv: ['./core/shared/infra/testing/expect-helpers.ts'],
   // coverageProvider: 'v8',

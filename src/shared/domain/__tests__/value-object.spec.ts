@@ -7,7 +7,10 @@ class StringValueObject extends ValueObject {
 }
 
 class ComplexValueObject extends ValueObject {
-  constructor(readonly prop1: string, readonly prop2: number) {
+  constructor(
+    readonly prop1: string,
+    readonly prop2: number,
+  ) {
     super();
   }
 }
