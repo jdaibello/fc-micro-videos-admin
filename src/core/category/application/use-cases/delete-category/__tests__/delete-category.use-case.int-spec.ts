@@ -4,17 +4,17 @@ import { setupSequelize } from '../../../../../shared/infra/testing/helpers';
 import { Category } from '../../../../domain/category.entity';
 import { CategoryModel } from '../../../../infra/db/sequelize/category.model';
 import { CategorySequelizeRepository } from '../../../../infra/db/sequelize/category-sequelize.repository';
-import { GetCategoryUseCase } from '../../get-category.use-case';
+import { DeleteCategoryUseCase } from '../delete-category.use-case';
 
-describe('GetCategoryUseCase Unit Tests', () => {
-  let useCase: GetCategoryUseCase;
+describe('DeleteCategoryUseCase Integration Tests', () => {
+  let useCase: DeleteCategoryUseCase;
   let repository: CategorySequelizeRepository;
 
   setupSequelize({ models: [CategoryModel] });
 
   beforeEach(() => {
     repository = new CategorySequelizeRepository(CategoryModel);
-    useCase = new GetCategoryUseCase(repository);
+    useCase = new DeleteCategoryUseCase(repository);
   });
 
   test('should throw error when category not found', async () => {
@@ -23,19 +23,12 @@ describe('GetCategoryUseCase Unit Tests', () => {
     await expect(() => useCase.execute({ id: uuid.id })).rejects.toThrow(new NotFoundError(uuid.id, Category));
   });
 
-  test('should return a category', async () => {
+  test('should delete a category', async () => {
     const category = Category.fake().aCategory().build();
 
     await repository.insert(category);
+    await useCase.execute({ id: category.category_id.id });
 
-    const output = await useCase.execute({ id: category.category_id.id });
-
-    expect(output).toStrictEqual({
-      id: category.category_id.id,
-      name: category.name,
-      description: category.description,
-      is_active: category.is_active,
-      created_at: category.created_at,
-    });
+    await expect(repository.findById(category.category_id)).resolves.toBeNull();
   });
 });
