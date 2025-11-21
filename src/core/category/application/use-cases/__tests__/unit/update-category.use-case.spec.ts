@@ -1,7 +1,7 @@
 import { NotFoundError } from '../../../../../shared/domain/errors/not-found.error';
 import { InvalidUuidError, Uuid } from '../../../../../shared/domain/value-objects/uuid.vo';
 import { Category } from '../../../../domain/category.entity';
-import { CategoryInMemoryRepository } from '../../../../infra/db/in-memory/category.in-memory.repository';
+import { CategoryInMemoryRepository } from '../../../../infra/db/in-memory/category-in-memory.repository';
 import { UpdateCategoryUseCase } from '../../update-category.use-case';
 
 describe('UpdateCategoryUseCase Unit Tests', () => {
@@ -13,7 +13,7 @@ describe('UpdateCategoryUseCase Unit Tests', () => {
     useCase = new UpdateCategoryUseCase(repository);
   });
 
-  test('should throw error when category not found', async () => {
+  it('should throws error when entity not found', async () => {
     await expect(() => useCase.execute({ id: 'fake id', name: 'fake' })).rejects.toThrow(new InvalidUuidError());
 
     const uuid = new Uuid();
@@ -23,7 +23,19 @@ describe('UpdateCategoryUseCase Unit Tests', () => {
     );
   });
 
-  test('should update a category', async () => {
+  it('should throw an error when aggregate is not valid', async () => {
+    const aggregate = new Category({ name: 'Movie' });
+    repository.items = [aggregate];
+
+    await expect(() =>
+      useCase.execute({
+        id: aggregate.category_id.id,
+        name: 't'.repeat(256),
+      }),
+    ).rejects.toThrowError('Entity Validation Error');
+  });
+
+  it('should update a category', async () => {
     const spyUpdate = jest.spyOn(repository, 'update');
     const entity = new Category({ name: 'Movie' });
     repository.items = [entity];

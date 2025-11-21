@@ -91,6 +91,7 @@ export class CategoryFakeBuilder<TBuild = any> {
         }),
       });
 
+      category.validate();
       return category;
     });
 
