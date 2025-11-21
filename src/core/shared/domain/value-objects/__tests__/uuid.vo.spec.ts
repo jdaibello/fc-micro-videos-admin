@@ -4,6 +4,10 @@ import { validate as uuidValidate } from 'uuid';
 describe('UUID Unit Tests', () => {
   const validateSpy = jest.spyOn(Uuid.prototype as any, 'validate');
 
+  beforeEach(() => {
+    validateSpy.mockClear();
+  });
+
   test('should throw error when uuid is invalid', () => {
     expect(() => {
       new Uuid('invalid-uuid');

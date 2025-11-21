@@ -90,11 +90,9 @@ export abstract class InMemorySearchableRepository<E extends Entity, EntityId ex
     }
 
     return [...items].sort((a, b) => {
-      // @ts-expect-error ignore
-      const aValue = custom_getter ? custom_getter(sort, a) : a[sort];
+      const aValue = custom_getter ? custom_getter(sort, a) : (a as any)[sort];
 
-      // @ts-expect-error ignore
-      const bValue = custom_getter ? custom_getter(sort, b) : b[sort];
+      const bValue = custom_getter ? custom_getter(sort, b) : (b as any)[sort];
 
       if (aValue < bValue) {
         return sort_dir === 'asc' ? -1 : 1;

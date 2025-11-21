@@ -1,4 +1,5 @@
 import { Uuid } from '../../../shared/domain/value-objects/uuid.vo';
+import '../../../shared/infra/testing/expect-helpers';
 import { Category } from '../category.entity';
 
 describe('Category Unit Tests', () => {
@@ -6,6 +7,10 @@ describe('Category Unit Tests', () => {
 
   beforeEach(() => {
     validateSpy = jest.spyOn(Category, 'validate');
+  });
+
+  afterEach(() => {
+    validateSpy.mockRestore();
   });
 
   describe('constructor', () => {
